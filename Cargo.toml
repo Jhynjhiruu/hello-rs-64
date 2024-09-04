@@ -1,0 +1,18 @@
+[package]
+name = "hello-rs-64"
+version = "0.1.0"
+edition = "2021"
+
+[profile.dev]
+
+[profile.release]
+lto = 'fat'
+opt-level = 's'
+
+[dependencies]
+# good_memory_allocator = { version = "0.1.7", default-features = false }
+#n64 = { path = "../../rust/n64" }
+n64 = { git = "https://github.com/Jhynjhiruu/n64-rs.git" }
+
+[features]
+ipl3 = ["n64/ipl3"]

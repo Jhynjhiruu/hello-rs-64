@@ -1,0 +1,5 @@
+/target
+/disasm
+*.z64
+*.app
+*.bak
