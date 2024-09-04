@@ -16,8 +16,13 @@ SECTIONS {
     header_ROM_START = __romPos;
     .hdr : AT(header_ROM_START) {
         LONG(0x80371240)
+        
         . = 8;
         LONG(__entry)
+
+        . = 0x10;
+        LONG(__load_size)
+
         . = 0x40;
         KEEP(*(.ipl3*));
         . = ALIGN(16);
@@ -25,6 +30,8 @@ SECTIONS {
     __romPos += SIZEOF(.hdr);
     __romPos = ALIGN(__romPos, 16);
     header_ROM_END = __romPos;
+
+    __load_start = __romPos;
 
     __romPos = boot_ROM_END;
     int_handler_ROM_START = __romPos;
@@ -85,6 +92,9 @@ SECTIONS {
     __romPos += SIZEOF(.rodata);
     __romPos = ALIGN(__romPos, 16);
     rodata_ROM_END = __romPos;
+
+    __load_end = __romPos;
+    __load_size = __load_end - __load_start;
 
     . = ALIGN(16);
     .bss (NOLOAD) : {
