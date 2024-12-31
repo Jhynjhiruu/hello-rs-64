@@ -4,13 +4,13 @@ OUTPUT_ARCH (mips)
 ENTRY(_startup)
 
 MEMORY {
-    KERN : ORIGIN = 0xA0000000, LENGTH = 0x00400000
-    CACHED : ORIGIN = 0x80000000, LENGTH = 0x00400000
+    KERN : ORIGIN = 0xA0400000, LENGTH = 0x00400000
+    CACHED : ORIGIN = 0x80400000, LENGTH = 0x00400000
     DUMMY : ORIGIN = 0x00000000, LENGTH = 0xFFFFFFFF
 }
 
 __int_handler = 0x80000180;
-__entry = 0x80000400;
+__entry = 0x80401000;
 
 SECTIONS {
     __romPos = 0;
@@ -110,10 +110,10 @@ SECTIONS {
          __bss_size = (__bss_end - __bss_start);
     } > CACHED
 
-    _heap_start = __bss_end;
-    _heap_len = (ORIGIN(CACHED) + LENGTH(CACHED)) - __bss_end - SIZEOF(.stack);
+    __heap_start = __bss_end;
+    __heap_len = (ORIGIN(CACHED) + LENGTH(CACHED)) - __bss_end - SIZEOF(.stack);
 
-    .stack _heap_start + _heap_len (NOLOAD) : {
+    .stack __heap_start + __heap_len (NOLOAD) : {
         __stack_start = .;
         KEEP(*(.stack));
         KEEP(*(.stack*));

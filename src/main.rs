@@ -2,13 +2,20 @@
 #![no_main]
 #![allow(clippy::empty_loop)]
 
+use n64::boot::interrupts::im;
+use n64::si::si;
 use n64::text::Colour;
 use n64::vi::vi;
 
 #[no_mangle]
 fn main() -> ! {
+    let im = im();
+    im.set_btn(true);
+
     let vi = vi();
 
+    //vi.pll_init();
+    //vi.init_calibrate();
     vi.init();
 
     vi.clear_framebuffer();
@@ -19,6 +26,10 @@ fn main() -> ! {
 
     vi.wait_vsync();
     vi.next_framebuffer();
+
+    let si = si();
+    si.init_hw();
+    si.txrx(b"Hello, World!\n", None);
 
     loop {}
 }
